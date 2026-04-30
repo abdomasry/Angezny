@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const User = require("../Models/User.Model");
+const User = require("../models/User.Model");
 
 // This middleware protects routes that require a logged-in user.
 // It runs BEFORE the controller function.

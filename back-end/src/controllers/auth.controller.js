@@ -357,7 +357,7 @@ const getMe = async (req, res) => {
 // GET /api/auth/notifications
 // ============================================================
 // Returns the logged-in user's notifications (newest first).
-const Notification = require("../Models/Notification");
+const Notification = require("../models/Notification");
 
 const getNotifications = async (req, res) => {
   try {

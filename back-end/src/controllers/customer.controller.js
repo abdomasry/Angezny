@@ -278,7 +278,7 @@ const getOrders = async (req, res) => {
     // render "already reviewed: 5 stars + your comment" vs. the submit button.
     // Only matters for completed orders — we could pre-filter, but the query
     // is cheap and keeps the code trivial.
-    const Review = require("../Models/Review");
+    const Review = require("../models/Review");
     const orderIds = orders.map(o => o._id);
     const reviews = await Review.find({
       serviceRequestId: { $in: orderIds },

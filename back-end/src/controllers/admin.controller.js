@@ -147,7 +147,7 @@ const getUserById = async (req, res) => {
 
     // If worker, get their worker profile
     if (user.role === "worker") {
-      const WorkerProfile = require("../Models/Worker.Profile");
+      const WorkerProfile = require("../models/Worker.Profile");
       const workerProfile = await WorkerProfile.findOne({ userId: user._id })
         .populate("Category", "name")
         .populate({ path: "services", select: "description price typeofService active" });
@@ -156,7 +156,7 @@ const getUserById = async (req, res) => {
 
     // If customer, get their customer profile
     if (user.role === "customer") {
-      const CustomerProfile = require("../Models/Customer.Profile");
+      const CustomerProfile = require("../models/Customer.Profile");
       const customerProfile = await CustomerProfile.findOne({ userId: user._id });
       response.customerProfile = customerProfile;
     }

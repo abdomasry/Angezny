@@ -1,0 +1,39 @@
+.claude/
+.superpowers/
+
+# dependencies
+node_modules/
+
+# next
+.next/
+out/
+
+# env
+.env
+.env.local
+.env.*
+**/.env
+**/.env.*
+
+# logs
+logs
+*.log
+
+# build
+dist/
+build/
+
+# flutter
+.flutter-plugins
+.flutter-plugins-dependencies
+.dart_tool/
+.packages
+.pub/
+build/
+
+# vscode
+.vscode/
+
+# mac/windows
+.DS_Store
+Thumbs.db

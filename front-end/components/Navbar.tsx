@@ -216,7 +216,7 @@ export default function Navbar() {
                 <div className="absolute top-full right-0 mt-2 w-80 bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/15 z-[100] overflow-hidden">
                   {suggestions.length === 0 ? (
                     <div className="py-6 text-center">
-                      <p className="text-sm text-on-surface-variant">لا توجد نتائج</p>
+                      <p className="text-sm text-on-surface-variant">{t('services.noResults')}</p>
                     </div>
                   ) : (
                     <div className="max-h-[320px] overflow-y-auto py-1">
@@ -405,7 +405,10 @@ export default function Navbar() {
                     </DropdownMenu.Portal>
                   </DropdownMenu.Root>
 
-                  {/* ========== LANGUAGE GLOBE DROPDOWN ========== */}
+                  {/* ========== LANGUAGE GLOBE DROPDOWN ==========
+                      Real switcher now: clicking an option calls the
+                      setLocale server action (writes the NEXT_LOCALE cookie),
+                      then router.refresh() pulls the new messages bundle. */}
                   <DropdownMenu.Root>
                     <DropdownMenu.Trigger asChild>
                       <button className="p-2 rounded-full hover:bg-surface-container-high transition-colors cursor-pointer">
@@ -419,20 +422,24 @@ export default function Navbar() {
                         sideOffset={8}
                       >
                         <DropdownMenu.Label className="px-3 py-2 text-sm font-bold text-on-surface">
-                          اللغة
+                          {t('common.language')}
                         </DropdownMenu.Label>
                         <DropdownMenu.Separator className="h-px bg-outline-variant/20 my-1" />
 
-                        {/* Arabic — currently active (shown with checkmark) */}
-                        <DropdownMenu.Item className={`${dropdownItemStyles} font-semibold text-primary`}>
-                          <Check className="w-4 h-4" />
-                          <span className="flex-1 text-right">العربية</span>
+                        <DropdownMenu.Item
+                          onSelect={() => handleLocaleChange('ar')}
+                          className={`${dropdownItemStyles} ${activeLocale === 'ar' ? 'font-semibold text-primary' : ''}`}
+                        >
+                          {activeLocale === 'ar' ? <Check className="w-4 h-4" /> : <span className="w-4" />}
+                          <span className="flex-1 text-right">{t('common.arabic')}</span>
                         </DropdownMenu.Item>
 
-                        {/* English — not active yet */}
-                        <DropdownMenu.Item className={dropdownItemStyles}>
-                          <span className="w-4" /> {/* Empty space to align with checkmark above */}
-                          <span className="flex-1 text-right">English</span>
+                        <DropdownMenu.Item
+                          onSelect={() => handleLocaleChange('en')}
+                          className={`${dropdownItemStyles} ${activeLocale === 'en' ? 'font-semibold text-primary' : ''}`}
+                        >
+                          {activeLocale === 'en' ? <Check className="w-4 h-4" /> : <span className="w-4" />}
+                          <span className="flex-1 text-right">{t('common.english')}</span>
                         </DropdownMenu.Item>
                       </DropdownMenu.Content>
                     </DropdownMenu.Portal>
@@ -563,4 +570,9 @@ export default function Navbar() {
           <Link href="/signin" className="flex flex-col items-center gap-1 text-on-surface-variant">
             <LogIn className="w-5 h-5" />
             <span className="text-[10px]">دخول</span>
-          <
+          </Link>
+        )}
+      </div>
+    </>
+  )
+}

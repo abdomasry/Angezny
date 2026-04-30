@@ -1,6 +1,6 @@
-const Conversation = require("../Models/Conversation");
-const LiveChat = require("../Models/LiveChat");
-const User = require("../Models/User.Model");
+const Conversation = require("../models/Conversation");
+const LiveChat = require("../models/LiveChat");
+const User = require("../models/User.Model");
 
 // ============================================================
 // Chat REST endpoints

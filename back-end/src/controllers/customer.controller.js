@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const User = require("../Models/User.Model");
-const CustomerProfile = require("../Models/Customer.Profile");
-const ServiceRequest = require("../Models/Service.Request");
+const User = require("../models/User.Model");
+const CustomerProfile = require("../models/Customer.Profile");
+const ServiceRequest = require("../models/Service.Request");
+const { parsePagination, paginationMeta } = require("../lib/pagination");
 
 // ============================================================
 // GET /api/customer/profile
@@ -242,8 +243,7 @@ const getOrders = async (req, res) => {
     // parseInt converts the string "2" from the URL into the number 2.
     // || provides a fallback if the value is NaN or 0.
     const status = req.query.status || "in_progress";
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const { page, limit, skip } = parsePagination(req, { defaultLimit: 10, maxLimit: 50 });
 
     // Decide which statuses to filter by based on the status parameter.
     let statusFilter;
@@ -270,7 +270,7 @@ const getOrders = async (req, res) => {
       .populate("categoryId", "name") // Get category name
       .populate("serviceId", "name images price typeofService priceRange") // Service details (name/price)
       .sort({ createdAt: -1 }) // Newest first (-1 = descending)
-      .skip((page - 1) * limit) // Skip previous pages
+      .skip(skip)
       .limit(limit)
       .lean(); // lean() so we can splice in a synthetic `review` field below
 
@@ -292,12 +292,7 @@ const getOrders = async (req, res) => {
 
     res.json({
       orders,
-      pagination: {
-        page: page,
-        limit: limit,
-        total: totalOrders,
-        pages: Math.ceil(totalOrders / limit),
-      },
+      pagination: paginationMeta({ page, limit, total: totalOrders }),
     });
   } catch (error) {
     console.error("getOrders error:", error);

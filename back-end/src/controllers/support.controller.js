@@ -18,9 +18,9 @@
 // ============================================================
 
 const mongoose = require("mongoose");
-const Ticket = require("../Models/Tickets");
-const Notification = require("../Models/Notification");
-const User = require("../Models/User.Model");
+const Ticket = require("../models/Tickets");
+const Notification = require("../models/Notification");
+const User = require("../models/User.Model");
 
 // Helper: emit notification:new to a single user's room. Silent on errors
 // (socket events are best-effort — the DB notification is the source of truth).

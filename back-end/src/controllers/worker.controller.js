@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const WorkerProfile = require("../Models/Worker.Profile");
-const WorkerServices = require("../Models/Worker.Services");
-const Review = require("../Models/Review");
-const ServiceRequest = require("../Models/Service.Request");
+const WorkerProfile = require("../models/Worker.Profile");
+const WorkerServices = require("../models/Worker.Services");
+const Review = require("../models/Review");
+const ServiceRequest = require("../models/Service.Request");
 const { parsePagination, paginationMeta } = require("../lib/pagination");
 
 // getWorkers — Returns a paginated, filtered, sorted list of workers

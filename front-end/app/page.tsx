@@ -429,7 +429,7 @@ export default function HomePage() {
       <footer className="w-full border-t border-border/15 bg-surface-container-low">
         <div className="flex flex-col md:flex-row justify-between items-center px-8 py-12 gap-6 w-full max-w-7xl mx-auto">
           <div className="flex flex-col items-center md:items-end gap-2">
-            <span className="text-lg font-bold text-on-surface">DK yet</span>
+            <span className="text-lg font-bold text-on-surface">Angezny</span>
             <p className="text-sm text-right leading-6 text-on-surface-variant">منصتكم الأولى لخدمات الصيانة والمنزل المتكاملة</p>
           </div>
           <div className="flex flex-wrap justify-center gap-8 flex-row">

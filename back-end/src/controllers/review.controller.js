@@ -18,10 +18,10 @@
 // already wired — we only add the POST side here.
 // ============================================================
 
-const Review = require("../Models/Review");
-const ServiceRequest = require("../Models/Service.Request");
-const WorkerProfile = require("../Models/Worker.Profile");
-const Notification = require("../Models/Notification");
+const Review = require("../models/Review");
+const ServiceRequest = require("../models/Service.Request");
+const WorkerProfile = require("../models/Worker.Profile");
+const Notification = require("../models/Notification");
 
 // Helper: emit notification:new over Socket.IO to a specific user. Same
 // pattern as order.controller — kept local to avoid a shared util file

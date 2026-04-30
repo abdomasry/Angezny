@@ -1,5 +1,5 @@
-const PaymentMethod = require("../Models/PaymentMethod");
-const User = require("../Models/User.Model");
+const PaymentMethod = require("../models/PaymentMethod");
+const User = require("../models/User.Model");
 
 // ============================================================
 // GET /api/customer/payment-methods

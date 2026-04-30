@@ -1,4 +1,4 @@
-const Coupon = require("../Models/Coupon");
+const Coupon = require("../models/Coupon");
 
 // ============================================================
 // Helper: augment a coupon with derived fields the UI needs.

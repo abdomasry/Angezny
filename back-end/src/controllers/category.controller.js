@@ -1,5 +1,5 @@
-const Category = require("../Models/Category");
-const WorkerServices = require("../Models/Worker.Services");
+const Category = require("../models/Category");
+const WorkerServices = require("../models/Worker.Services");
 
 // ========== READ operations (public — no auth needed) ==========
 

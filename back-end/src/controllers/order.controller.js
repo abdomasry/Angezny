@@ -8,12 +8,12 @@
 // Notification). A dedicated controller keeps the responsibility clear.
 // ============================================================
 
-const ServiceRequest = require("../Models/Service.Request");
-const WorkerServices = require("../Models/Worker.Services");
-const Notification = require("../Models/Notification");
-const Coupon = require("../Models/Coupon");
-const WorkerProfile = require("../Models/Worker.Profile");
-const WalletTransaction = require("../Models/Wallet.Transaction");
+const ServiceRequest = require("../models/Service.Request");
+const WorkerServices = require("../models/Worker.Services");
+const Notification = require("../models/Notification");
+const Coupon = require("../models/Coupon");
+const WorkerProfile = require("../models/Worker.Profile");
+const WalletTransaction = require("../models/Wallet.Transaction");
 const { validateCouponInternal } = require("./coupon.controller");
 const { computeRank } = require("../lib/rank");
 

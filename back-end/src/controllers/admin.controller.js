@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const User = require("../Models/User.Model");
-const WorkerProfile = require("../Models/Worker.Profile");
-const WorkerServices = require("../Models/Worker.Services");
-const Report = require("../Models/Reports");
-const ServiceRequest = require("../Models/Service.Request");
-const Category = require("../Models/Category");
-const Notification = require("../Models/Notification");
+const User = require("../models/User.Model");
+const WorkerProfile = require("../models/Worker.Profile");
+const WorkerServices = require("../models/Worker.Services");
+const Report = require("../models/Reports");
+const ServiceRequest = require("../models/Service.Request");
+const Category = require("../models/Category");
+const Notification = require("../models/Notification");
+const { parsePagination, paginationMeta } = require("../lib/pagination");
 
 const pendingVerificationFilter = {
   $or: [
@@ -204,8 +205,7 @@ const updateUserStatus = async (req, res) => {
 // Admin reviews their documents and approves or rejects.
 const getVerificationRequests = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 5;
+    const { page, limit, skip } = parsePagination(req, { defaultLimit: 5, maxLimit: 50 });
 
     const total = await WorkerProfile.countDocuments(pendingVerificationFilter);
 
@@ -214,7 +214,7 @@ const getVerificationRequests = async (req, res) => {
       .populate("Category", "name")
       .populate("serviceCategories", "name")
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
+      .skip(skip)
       .limit(limit);
 
     const requests = rawRequests.map((request) => {
@@ -225,12 +225,7 @@ const getVerificationRequests = async (req, res) => {
 
     res.json({
       requests,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-      },
+      pagination: paginationMeta({ page, limit, total }),
     });
   } catch (error) {
     console.error("getVerificationRequests error:", error);
@@ -461,8 +456,7 @@ const updateOrderStatus = async (req, res) => {
 // Workers submit services → they start as "pending" → admin reviews here.
 const getPendingServices = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const { page, limit, skip } = parsePagination(req, { defaultLimit: 10, maxLimit: 50 });
 
     const total = await WorkerServices.countDocuments({ approvalStatus: "pending" });
 
@@ -473,12 +467,12 @@ const getPendingServices = async (req, res) => {
       })
       .populate("categoryId", "name")
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
+      .skip(skip)
       .limit(limit);
 
     res.json({
       services,
-      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+      pagination: paginationMeta({ page, limit, total }),
     });
   } catch (error) {
     console.error("getPendingServices error:", error);
@@ -600,13 +594,11 @@ const getLicenses = async (req, res) => {
     const status = ["pending", "approved", "rejected"].includes(req.query.status)
       ? req.query.status
       : "pending";
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+    const { page, limit, skip } = parsePagination(req, { defaultLimit: 20, maxLimit: 100 });
 
     // Aggregation: unwind licenses → match status → join the user → project
     // a flat row per license. Doing this in Mongo (instead of fetching all
     // profiles client-side) keeps the queue fast as the platform grows.
-    const skip = (page - 1) * limit;
 
     const pipeline = [
       { $match: { "licenses.status": status } },
@@ -650,7 +642,7 @@ const getLicenses = async (req, res) => {
     const total = countResult[0]?.total || 0;
     res.json({
       licenses: items,
-      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
+      pagination: paginationMeta({ page, limit, total }),
     });
   } catch (error) {
     console.error("getLicenses error:", error);

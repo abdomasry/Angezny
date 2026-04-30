@@ -13,12 +13,12 @@
 
 require("dotenv").config();
 const mongoose = require("mongoose");
-const WorkerProfile = require("../Models/Worker.Profile");
-const ServiceRequest = require("../Models/Service.Request");
+const WorkerProfile = require("../models/Worker.Profile");
+const ServiceRequest = require("../models/Service.Request");
 const { computeRank } = require("../lib/rank");
 
 async function main() {
-  const uri = "mongodb+srv://Masry_db:ufVYQK2SoactVrI4@final-project.x6hd7wt.mongodb.net/";
+  const uri = process.env.MONGO_URI;
   if (!uri) {
     console.error("MONGO_URI is not set; aborting.");
     process.exit(1);

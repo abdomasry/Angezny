@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
-const WorkerProfile = require("../Models/Worker.Profile");
-const WorkerServices = require("../Models/Worker.Services");
-const ServiceRequest = require("../Models/Service.Request");
-const User = require("../Models/User.Model");
-const Notification = require("../Models/Notification");
-const WalletTransaction = require("../Models/Wallet.Transaction");
+const WorkerProfile = require("../models/Worker.Profile");
+const WorkerServices = require("../models/Worker.Services");
+const ServiceRequest = require("../models/Service.Request");
+const User = require("../models/User.Model");
+const Notification = require("../models/Notification");
+const WalletTransaction = require("../models/Wallet.Transaction");
+const { parsePagination, paginationMeta } = require("../lib/pagination");
 
 const populateWorkerProfile = (query, { publicServices = false } = {}) =>
   query
@@ -668,8 +669,7 @@ const getMyOrders = async (req, res) => {
     const userId = req.user._id;
 
     const status = req.query.status || "in_progress";
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const { page, limit, skip } = parsePagination(req, { defaultLimit: 10, maxLimit: 50 });
 
     // Same status grouping as customer orders
     let statusFilter;
@@ -692,17 +692,12 @@ const getMyOrders = async (req, res) => {
       .populate("categoryId", "name")
       .populate("serviceId", "name images price typeofService priceRange")
       .sort({ createdAt: -1 })
-      .skip((page - 1) * limit)
+      .skip(skip)
       .limit(limit);
 
     res.json({
       orders,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit),
-      },
+      pagination: paginationMeta({ page, limit, total }),
     });
   } catch (error) {
     console.error("getMyOrders error:", error);

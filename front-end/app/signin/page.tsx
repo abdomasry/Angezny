@@ -20,12 +20,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/lib/auth-context";
 import { signinSchema, type SigninValues } from "@/lib/schemas";
 
 export default function SignInPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const t = useTranslations()
 
   // UI-only state (not validated, doesn't go to backend).
   const [showPassword, setShowPassword] = useState(false);
@@ -73,28 +75,28 @@ export default function SignInPage() {
       <div className="w-full max-w-6xl grid md:grid-cols-2 gap-0 bg-surface-container-lowest rounded-xl overflow-hidden shadow-[24px_0_24px_-12px_rgba(18,28,42,0.06)] border border-outline-variant/15">
 
         {/* Left Side: Visual Content (Desktop Only) */}
-        <div className="hidden md:flex flex-col justify-between p-12 bg-gradient-to-br from-primary to-primary-container text-on-primary relative overflow-hidden">
+        <div className="hidden md:flex flex-col justify-between p-12 bg-linear-to-br from-primary to-primary-container text-on-primary relative overflow-hidden">
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-12">
               <Wallet className="w-10 h-10" />
-              <h1 className="text-2xl font-bold tracking-tight">المجلس الرقمي</h1>
+              <h1 className="text-2xl font-bold tracking-tight">{t('brand.longName')}</h1>
             </div>
             <div className="space-y-6 max-w-md">
-              <h2 className="text-4xl font-bold leading-tight">بوابتك لعالم من الخدمات الرقمية المتكاملة</h2>
+              <h2 className="text-4xl font-bold leading-tight">{t('auth.signin.marketing.heading')}</h2>
               <p className="text-on-primary-container text-lg leading-relaxed opacity-90">
-                انضم إلى آلاف المستخدمين في أكبر سوق للخدمات في المنطقة. نجمع لك الجودة والسهولة في مكان واحد.
+                {t('auth.signin.marketing.body')}
               </p>
             </div>
           </div>
 
           <div className="relative z-10 grid grid-cols-2 gap-4">
             <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
-              <span className="text-2xl font-bold block">+٥٠ ألف</span>
-              <span className="text-sm opacity-80">مستخدم نشط</span>
+              <span className="text-2xl font-bold block">{t('auth.signin.marketing.users')}</span>
+              <span className="text-sm opacity-80">{t('auth.signin.marketing.usersLabel')}</span>
             </div>
             <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/10">
-              <span className="text-2xl font-bold block">+٢٠٠</span>
-              <span className="text-sm opacity-80">مزود خدمة معتمد</span>
+              <span className="text-2xl font-bold block">{t('auth.signin.marketing.providers')}</span>
+              <span className="text-sm opacity-80">{t('auth.signin.marketing.providersLabel')}</span>
             </div>
           </div>
 
@@ -104,8 +106,8 @@ export default function SignInPage() {
         {/* Right Side: Auth Form */}
         <div className="p-8 md:p-16 flex flex-col justify-center bg-surface-container-lowest">
           <div className="mb-10 text-center md:text-right">
-            <h3 className="text-3xl font-bold text-on-surface mb-2">تسجيل الدخول</h3>
-            <p className="text-on-surface-variant">مرحباً بك مجدداً! يرجى إدخال بياناتك للمتابعة.</p>
+            <h3 className="text-3xl font-bold text-on-surface mb-2">{t('auth.signin.title')}</h3>
+            <p className="text-on-surface-variant">{t('auth.signin.subtitle')}</p>
           </div>
 
           {/* Toggle Switch — purely cosmetic now: it swaps placeholder/icon/input
@@ -117,21 +119,21 @@ export default function SignInPage() {
               onClick={() => setActiveTab("email")}
               className={`flex-1 py-2 px-6 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === "email" ? "bg-primary text-on-primary shadow-sm" : "text-on-surface-variant hover:bg-surface-container"}`}
             >
-              البريد الإلكتروني
+              {t('auth.signin.tabEmail')}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("mobile")}
               className={`flex-1 py-2 px-6 rounded-full text-sm font-semibold transition-all cursor-pointer ${activeTab === "mobile" ? "bg-primary text-on-primary shadow-sm" : "text-on-surface-variant hover:bg-surface-container"}`}
             >
-              رقم الهاتف
+              {t('auth.signin.tabPhone')}
             </button>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-on-surface-variant pr-1" htmlFor="identifier">
-                {activeTab === "email" ? "البريد الإلكتروني" : "رقم الهاتف"}
+                {activeTab === "email" ? t('auth.signin.labelEmail') : t('auth.signin.labelPhone')}
               </label>
               <div className="relative">
                 <input
@@ -162,8 +164,8 @@ export default function SignInPage() {
 
             <div className="space-y-2">
               <div className="flex justify-between items-center px-1">
-                <label className="block text-sm font-semibold text-on-surface-variant" htmlFor="password">كلمة المرور</label>
-                <Link className="text-xs text-primary font-medium hover:underline" href="/forgot-password">نسيت كلمة المرور؟</Link>
+                <label className="block text-sm font-semibold text-on-surface-variant" htmlFor="password">{t('auth.signin.labelPassword')}</label>
+                <Link className="text-xs text-primary font-medium hover:underline" href="/forgot-password">{t('auth.signin.forgotPassword')}</Link>
               </div>
               <div className="relative">
                 <input
@@ -197,7 +199,7 @@ export default function SignInPage() {
             {/* Remember Me */}
             <div className="flex items-center gap-2 px-1">
               <input className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary/30" id="remember" type="checkbox" />
-              <label className="text-sm text-on-surface-variant cursor-pointer" htmlFor="remember">تذكرني على هذا الجهاز</label>
+              <label className="text-sm text-on-surface-variant cursor-pointer" htmlFor="remember">{t('auth.signin.rememberMe')}</label>
             </div>
 
             {/* Server-side rejection (wrong password, account locked, …) */}
@@ -212,14 +214,14 @@ export default function SignInPage() {
               disabled={isSubmitting}
               className="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 hover:bg-primary-container active:scale-[0.98] transition-all mt-4 cursor-pointer disabled:opacity-60"
             >
-              {isSubmitting ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
+              {isSubmitting ? t('auth.signin.submitting') : t('auth.signin.submit')}
             </button>
           </form>
 
           {/* Social Logins */}
           <div className="relative my-10">
             <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-outline-variant/30"></div></div>
-            <div className="relative flex justify-center text-sm"><span className="px-4 bg-surface-container-lowest text-on-surface-variant">أو المتابعة باستخدام</span></div>
+            <div className="relative flex justify-center text-sm"><span className="px-4 bg-surface-container-lowest text-on-surface-variant">{t('auth.signin.or')}</span></div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -230,19 +232,19 @@ export default function SignInPage() {
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
-              <span className="text-sm font-semibold">جوجل</span>
+              <span className="text-sm font-semibold">{t('auth.signin.google')}</span>
             </button>
             <button type="button" className="flex items-center justify-center gap-3 py-3 border border-outline-variant/30 rounded-xl hover:bg-surface-container-low transition-all cursor-pointer">
               <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
               </svg>
-              <span className="text-sm font-semibold">فيسبوك</span>
+              <span className="text-sm font-semibold">{t('auth.signin.facebook')}</span>
             </button>
           </div>
 
           <div className="mt-12 text-center">
-            <p className="text-on-surface-variant">ليس لديك حساب؟
-              <Link className="text-primary font-bold hover:underline mr-1" href="/signup">إنشاء حساب جديد</Link>
+            <p className="text-on-surface-variant">{t('auth.signin.noAccount')}
+              <Link className="text-primary font-bold hover:underline mr-1" href="/signup">{t('auth.signin.createAccount')}</Link>
             </p>
           </div>
         </div>

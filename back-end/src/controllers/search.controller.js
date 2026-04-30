@@ -1,6 +1,6 @@
-const WorkerServices = require("../Models/Worker.Services");
-const Category = require("../Models/Category");
-const SearchLog = require("../Models/SearchLog");
+const WorkerServices = require("../models/Worker.Services");
+const Category = require("../models/Category");
+const SearchLog = require("../models/SearchLog");
 
 // ============================================================
 // GET /api/search/suggest?q=<query>
